@@ -1,0 +1,7 @@
+_base_config: config/pretrain/nuscenes/slidr/slidr_moco.yaml
+
+model:
+  image:
+    weights: "dino"
+ 
+

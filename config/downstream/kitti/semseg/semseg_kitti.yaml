@@ -1,0 +1,15 @@
+_base_config: config/downstream/nuscenes/semseg/semseg_nuscenes.yaml
+
+dataset:
+  name: "kitti"
+
+trainer:
+  batch_size: 16
+
+solver:
+  lr : 0.05
+
+model:
+  # WARNING: DO NOT CHANGE THE FOLLOWING PARAMETERS
+  # ===============================================
+  n_out : 20

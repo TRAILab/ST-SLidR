@@ -1,0 +1,25 @@
+dataset:
+  training: "miniset"
+
+trainer:
+  num_epochs: 2
+  batch_size: 2
+  num_gpus: 1
+  num_threads: 1
+
+# Evaluation
+eval:
+  finetuning:
+    enabled: True
+    cfg_file: config/downstream/nuscenes/semseg/semseg_nuscenes_mini.yaml
+    dataset_skip_step: 1 # 1% finetuning
+  linear_probe:
+    enabled: True
+    cfg_file: config/downstream/nuscenes/semseg/semseg_nuscenes_mini.yaml
+    dataset_skip_step: 1 # 100% linear probing
+
+# wandb config
+wandb:
+  enabled: True
+  project: mini_nuscenes_pretrain
+  entity: trailab

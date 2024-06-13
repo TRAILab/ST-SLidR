@@ -1,0 +1,18 @@
+_base_config: config/pretrain/nuscenes/slidr/base_slidr.yaml
+
+dataset:
+  cylindrical_coordinates: True
+  # whether to use the true validation set or the custom parametrization set
+  training: "parametrize"
+
+solver:
+  lr: 0.5
+
+model:
+  point_cloud:
+    backbone: "minkunet"
+
+superpixels:
+  type: "slic"
+  size: 150 # DO NOT CHANGE PARAMETER
+

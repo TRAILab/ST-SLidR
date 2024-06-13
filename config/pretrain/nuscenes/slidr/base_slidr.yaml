@@ -1,0 +1,49 @@
+_base_config: config/pretrain/nuscenes/base_nuscenes.yaml
+
+trainer:
+  num_epochs: 50
+  batch_size: 16
+
+solver:
+  lr: 0.5
+  momentum: 0.9
+  dampening: 0.1
+  weight_decay: 0.0001
+
+model:
+  n_out: 64
+  normalize_features: True # DO NOT CHANGE PARAMETER
+  pointcloud:
+    # point cloud backbone to use among "minkunet" and "voxelnet"
+    backbone: "minkunet"
+    kernel_size: 3
+    bn_momentum: 0.05
+  image:
+    crop_size : [224, 416]
+    crop_ratio : [1.5555555555555556, 1.8888888888888888]
+    # which image pretraining to chose among:
+    # 'imagenet','obow', 'pixpro', 'moco_v1', 'moco_v2', 'swav',
+    # 'deepcluster_v2', 'dino', 'moco_coco'
+    weights: "moco_v2"
+    # which image encoder to use (only imagenet is available with resnet18)
+    encoder: "resnet50"
+    # which image decoder to use
+    # 'bilinear', 'unet', 'fpn', 'semseg', 'nnfe', 'dilation', 'ppkt'
+    decoder : "dilation"
+    # return pretrained image features for computing similarity between superpixels
+    return_pretrain_feat: False
+
+criteria:
+  # temperature parameter in the InfoNCE loss
+  NCE_temperature : 0.07
+  # number of positive matches in the InfoNCE loss
+  num_matches : 4096
+  # which losses to use (note that multiple losses will be summed)
+  # loss_per_scene, loss_superpixels, loss_superpixels_reduce,
+  # loss_superpixels_reduce_all, loss_superpixels_transforms
+  losses:
+    enabled: ["loss_superpixels_average"]
+
+superpixels:
+  type: Null
+  size: Null

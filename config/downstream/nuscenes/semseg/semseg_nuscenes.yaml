@@ -1,0 +1,46 @@
+dataset:
+  name: "nuscenes"
+  cylindrical_coordinates: True
+  voxel_size: 0.1
+  # whether to use the true validation set or the custom parametrization set
+  training: "validate"
+  transforms:
+    # transformations to apply to the clouds
+    clouds: ["Rotation", "FlipAxis"]
+
+trainer:
+  num_epochs: 50
+  batch_size: 16
+  dataset_skip_step: 100
+  num_gpus: 2
+  num_threads: 32
+  resume_path : Null
+  pretraining_path : Null
+
+solver:
+  optimizer : 'sgd'
+  scheduler : 'cosine'
+  lr : 0.02
+  lr_head : 2.0
+  momentum : 0.9
+  dampening : 0.1
+  weight_decay : 0.0001
+  weight_decay_head : Null
+
+model:
+  # WARNING: DO NOT CHANGE THE FOLLOWING PARAMETERS
+  # ===============================================
+  n_out : 17
+  ignore_index : 0
+  normalize_features : False
+  # ===============================================
+  # use the frozen backbone setup
+  freeze_layers : False
+  pointcloud:
+    # 3D convolution kernel size
+    kernel_size : 3
+    bn_momentum : 0.02
+
+criteria:
+  # lovasz is actually a sum of both losses
+  loss : "lovasz"  # "crossentropy"

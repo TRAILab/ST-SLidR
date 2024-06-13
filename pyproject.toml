@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stslidr"
+version = "0.0.1"
+requires-python = ">=3.7"
+dependencies = [
+    "nuscenes-devkit==1.1.9",
+    "pytorch_lightning==1.6.0",
+    "torchmetrics==0.11.4",
+    "omegaconf==2.3.0",
+    "pillow==9.5.0",
+    "scikit-image==0.18.2",
+    "wandb==0.15.12"]
+
+
+[project.optional-dependencies]
+torch = ["torch==1.12.0", "torchvision==0.13.0", "torchaudio==0.12.0"]
+dev = ["isort", "pytest"]
+
+[tool.setuptools]
+py-modules = []
+include-package-data = true

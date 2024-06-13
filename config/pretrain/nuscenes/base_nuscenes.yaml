@@ -1,0 +1,77 @@
+dataset:
+  name: "nuscenes"
+  cylindrical_coordinates: True
+  voxel_size: 0.1
+  # whether to use the true validation set or the custom parametrization set
+  training: "parametrize"
+  transforms:
+    # transformations to apply to the clouds
+    clouds: ["Rotation", "FlipAxis"]
+    # transformations to apply to both the clouds and the images among:
+    # 'FlipHorizontal', 'DropCuboids', 'ResizedCrop'
+    mixed: ["DropCuboids", "ResizedCrop", "FlipHorizontal"]
+
+trainer:
+  num_epochs: Null
+  batch_size: Null
+  dataset_skip_step: 1
+  num_gpus: 2
+  num_threads: 32
+  resume_path: Null
+  checkpoint_every_n_epochs: 10
+
+criteria:
+  losses:
+    enabled: []
+    # ADD NEW LOSSES TO THIS FILE
+    params:
+      loss: Null
+      loss_superpixels_average: Null
+      loss_superpixels_feat_similarity_average:
+        # set weighting function
+        weighting_function: "featsim_min_threshold"
+        # Method 1: set any feature similarity less than featsim_min_threshold to 0.0
+        # To retrieve slidr set to 1.0
+        featsim_min_threshold: 1.0
+        # Method 2: similarity^featsim_exponent where range of featsim_exponent is [1.0, inf]
+        # to retrieve slidr set to large positive value 1000
+        featsim_exponent: 1000.0
+        # whether to compute feature similarity on batch OR scene level
+        batch_level: True 
+      loss_superpixels_dist_similarity_average:
+        dist_sim_exponential_decay: True
+        # To retrieve slidr set to large positive value
+        dist_sim_exponential_decay_rate: 10.0
+      loss_superpixels_fused_similarity_average:
+        # feature similarity loss parameters - loss_superpixels_feat_similarity_average
+        weighting_function: "featsim_min_threshold"
+        featsim_min_threshold: 0.0
+        featsim_exponent: 1000.0
+        batch_level: False 
+        # spatial similarity loss parameters - loss_superpixels_dist_similarity_average
+        dist_sim_exponential_decay: True
+        dist_sim_exponential_decay_rate: 0.1
+
+# Evaluation
+eval:
+  finetuning_nuscenes:
+    enabled: True
+    cfg_file: config/downstream/nuscenes/semseg/semseg_nuscenes.yaml
+    dataset_skip_step: 100 # 1% finetuning
+    lr: 0.02
+  linear_probe_nuscenes:
+    enabled: True
+    cfg_file: config/downstream/nuscenes/semseg/semseg_nuscenes.yaml
+    dataset_skip_step: 1 # 100% linear probing
+    lr: 0.05
+  finetuning_semkitti:
+    enabled: True
+    cfg_file: config/downstream/kitti/semseg/semseg_kitti.yaml
+    dataset_skip_step: 100 # 1% finetuning
+    lr: 0.02
+
+# wandb config
+wandb:
+  enabled: True
+  project: stslidr
+  entity: trailab

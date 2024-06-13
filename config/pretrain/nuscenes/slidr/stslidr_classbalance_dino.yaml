@@ -1,0 +1,17 @@
+_base_config: config/pretrain/nuscenes/slidr/slidr_dino.yaml
+
+model:
+  image:
+    # return pretrained image features for computing similarity between superpixels
+    return_pretrain_feat: True
+
+criteria:
+  NCE_temperature: 0.07
+  losses:
+    enabled: ["loss_superpixel_stslidr_classbalance"]
+    params:
+      loss_superpixel_stslidr_classbalance:
+        loss_balance_noise_threshold: 0.5 # anything lower than 0.5 is assumed to be noise
+        min_quantile: 0.01 # percentage of negatives to drop
+ 
+

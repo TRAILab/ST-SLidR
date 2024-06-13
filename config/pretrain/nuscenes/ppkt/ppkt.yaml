@@ -1,0 +1,15 @@
+_base_config: config/pretrain/nuscenes/slidr/base_slidr.yaml
+
+model:
+  image:
+    # which image decoder to use
+    # 'bilinear', 'unet', 'fpn', 'semseg', 'nnfe', 'dilation', 'ppkt'
+    decoder : "ppkt"
+
+criteria:
+  losses:
+    enabled: ["loss_ppkt"]
+
+superpixels:
+  type: "slic"
+  size: 150 # DO NOT CHANGE PARAMETER
